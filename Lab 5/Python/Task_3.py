@@ -16,7 +16,7 @@ for T in range(time_endpt):
     time = np.arange(start_time, stop_time, ts)
 
     # Generating the message signal
-    message_t = 2 * B * np.sinc(2 * math.pi * B * (time - (-start_time + stop_time)/2))
+    message_t = 2 * B * np.sinc(2 * B * (time - (-start_time + stop_time)/2))
 
     # Modelling the Channel
     a = 0.5  # a is less than 1
