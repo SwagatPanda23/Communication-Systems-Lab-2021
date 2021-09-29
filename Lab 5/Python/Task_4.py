@@ -33,7 +33,7 @@ for T in range(time_endpt):
     message_t = message_data[T*fs:fs*(T + 1)]
     # Modelling the Channel - Choose the bandwidth such that all the frequencies are captured.
     B = 20000
-    channel_t = 2 * B * np.sinc(2 * math.pi * B * (time - (-start_time + stop_time)/2))
+    channel_t = 2 * B * np.sinc(2 * B * (time - (-start_time + stop_time)/2))
 
     plt.figure(1)
     plt.plot(time + T, message_t)
