@@ -1,7 +1,7 @@
 clear
 
 
-signal_duration = 29;
+signal_duration = 5;
 
 for T = 0:signal_duration
     
@@ -49,11 +49,11 @@ for T = 0:signal_duration
     output_f = fftshift(abs(fft(output_t)/fs));
    
     
-    % demodulation - the divide by 4 factor is to account for the
-    % Amplititude of 2 which has been multiplied to the signal twice
+    % demodulation - the divide by 2 factor is to account for the
+    % Amplititude of 2 (net) in time and 4 in frequency which has been multiplied to the signal twice
     % beforehand.
     B_LPF = 300;
-    output_predemod_t = (carrier_signal_t/4).*output_t;
+    output_predemod_t = (carrier_signal_t/2).*output_t;
     LPF_t = 2*B_LPF*sinc(2*B_LPF*(time - (start_time + stop_time) / 2));
     output_demod_t = conv(LPF_t, output_predemod_t,'same')/fs;
 
