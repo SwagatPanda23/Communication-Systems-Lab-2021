@@ -45,17 +45,19 @@ for T = 0:signal_duration
     % Defining the channel - Multiplied with carrier to shift it to the carrier frequency.
     B = 300;
     channel_t = 2*B*sinc(2*B*(time - (start_time + stop_time) / 2)).*carrier_signal_t;
-    output_t = conv(message_mod_t,channel_t,'same')/fs + noise;
+    output_t = conv(message_mod_t,channel_t,'same')/fs + noise';
     output_f = fftshift(abs(fft(output_t)/fs));
    
     
-    % demodulation
+    % demodulation - the divide by 4 factor is to account for the
+    % Amplititude of 2 which has been multiplied to the signal twice
+    % beforehand.
     B_LPF = 300;
-    output_predemod_t = (carrier_signal_t/2).*output_t;
+    output_predemod_t = (carrier_signal_t/4).*output_t;
     LPF_t = 2*B_LPF*sinc(2*B_LPF*(time - (start_time + stop_time) / 2));
     output_demod_t = conv(LPF_t, output_predemod_t,'same')/fs;
 
-    output_predemod_f = conv(output_f, carrier_signal_f/2, 'same');
+    output_predemod_f = conv(output_f, carrier_signal_f/4, 'same');
     LPF_f = rectpuls(freq_axis, 2*B_LPF);
     output_demod_f = output_predemod_f.*LPF_f;
     
