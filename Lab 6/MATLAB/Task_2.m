@@ -1,4 +1,4 @@
-clear
+cclear
 
 signal_duration = 29;
 
@@ -48,9 +48,9 @@ for T = 0:signal_duration
     output_f = fftshift(abs(fft(output_t)/fs));
    
     
-    % demodulation - division by 4 to ensure that the amplitude of the
-    % carrier which has been multiplied twice is reduced to 1.
-    y = hilbert(output_t).*exp(-1i*2*pi*f_carrier*time)/4;
+    % demodulation - division by 2 to ensure that the amplitude of the
+    % carrier which has been multiplied before is reduced to 1.
+    y = hilbert(output_t).*exp(-1i*2*pi*f_carrier*time)/2;
     output_demod_t = abs(y + 1i*y);
     output_demod_f = fftshift(abs(fft(output_demod_t)/fs));
     
