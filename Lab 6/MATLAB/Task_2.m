@@ -44,12 +44,13 @@ for T = 0:signal_duration
     % Defining the channel - Multiplied with carrier to shift it to the carrier frequency.
     B = 300;
     channel_t = 2*B*sinc(2*B*(time - (start_time + stop_time) / 2)).*carrier_signal_t;
-    output_t = conv(message_mod_t,channel_t,'same')/fs + noise;
+    output_t = conv(message_mod_t,channel_t,'same')/fs + noise';
     output_f = fftshift(abs(fft(output_t)/fs));
    
     
-    % demodulation
-    y = hilbert(output_t).*exp(-1i*2*pi*f_carrier*time);
+    % demodulation - division by 4 to ensure that the amplitude of the
+    % carrier which has been multiplied twice is reduced to 1.
+    y = hilbert(output_t).*exp(-1i*2*pi*f_carrier*time)/4;
     output_demod_t = abs(y + 1i*y);
     output_demod_f = fftshift(abs(fft(output_demod_t)/fs));
     
