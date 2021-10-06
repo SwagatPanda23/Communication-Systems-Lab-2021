@@ -40,15 +40,17 @@ for T = 0:signal_duration - 1
     B = 10000;
     channel_t = 2*B*sinc(2*B*(time - (start_time + stop_time) / 2)).*carrier_signal_t;
     
-    output_t_left = conv(message_mod_t_left,channel_t,'same')/fs + noise.';
+    output_t_left = conv(message_mod_t_left,channel_t,'same')/fs + noise';
     output_f_left = fftshift(abs(fft(output_t_left)/fs));
-    output_t_right = conv(message_mod_t_right,channel_t,'same')/fs + noise.';
+    output_t_right = conv(message_mod_t_right,channel_t,'same')/fs + noise';
     output_f_right = fftshift(abs(fft(output_t_right)/fs));
    
     
-    % demodulation
+     % demodulation - the divide by 2 factor is to account for the
+    % Amplititude of 2 (net) in time and 4 in frequency which has been multiplied to the signal twice
+    % beforehand.
     B_LPF = 10000;
-    output_predemod_t_left = (carrier_signal_t/2).*output_t_left;
+    output_predemod_t_left = (carrier_signal_t).*output_t_left/2;
     LPF_t = 2*B_LPF*sinc(2*B_LPF*(time - (start_time + stop_time) / 2));
     output_demod_t_left = conv(LPF_t, output_predemod_t_left,'same')/fs;
 
@@ -56,7 +58,7 @@ for T = 0:signal_duration - 1
     LPF_f = rectpuls(freq_axis, 2*B_LPF);
     output_demod_f_left = output_predemod_f_left.*LPF_f;
     
-    output_predemod_t_right = (carrier_signal_t/2).*output_t_right;
+    output_predemod_t_right = (carrier_signal_t).*output_t_right/2;
     output_demod_t_right = conv(LPF_t, output_predemod_t_right,'same')/fs;
 
     output_predemod_f_right = conv(output_f_right, carrier_signal_f/2, 'same');
