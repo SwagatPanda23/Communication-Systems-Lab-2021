@@ -36,8 +36,8 @@ for T = 0:signal_duration
     message_mod_f = fftshift(abs(fft(message_mod_t))/fs);
     
     % Modelling noise
-    mu = 0;  % Sum of last two digits of ID
-    sigma_square = 0.01;  % Sum of last three digits of ID
+    mu = 0;
+    sigma_square = 0.01;
     sigma = sqrt(sigma_square);
     noise = mu + sigma * randn(numel(time),1);
    
