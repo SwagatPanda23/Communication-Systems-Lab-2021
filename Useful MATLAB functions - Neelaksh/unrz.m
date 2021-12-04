@@ -1,8 +1,8 @@
-function [t,x] = unrz(bits, bitrate)
+function [t,x] = unrz(bits, bitrate, res)
 %   Encode bit string using ON-OFF NRZ code.
 
 T = length(bits)/bitrate; % full time of bit sequence
-n = 200;
+n = res;
 N = n*length(bits);
 dt = T/N;
 t = 0:dt:T;
