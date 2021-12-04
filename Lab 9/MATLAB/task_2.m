@@ -53,21 +53,49 @@ a_prz = a_pnrz;
 % The sum of Rn in Sx(f) is from n = 1 to inf. 
 % NRZ
 R0_unrz = r_unrz(lags_unrz == 0);
-Rn_sum_unrz = sum(r_unrz(lags_unrz > 0)); % from n = 1 to inf
+Rn_unrz = r_unrz(lags_unrz > 0); % from n = 1 to inf
+n_unrz = lags_unrz(lags_unrz > 0);
+
 R0_pnrz = r_pnrz(lags_pnrz == 0);
-Rn_sum_pnrz = sum(r_pnrz(lags_pnrz > 0)); % from n = 1 to inf
+Rn_pnrz = r_pnrz(lags_pnrz > 0); % from n = 1 to inf
+n_pnrz = lags_pnrz(lags_pnrz > 0);
 % RZ
 R0_urz = r_urz(lags_urz == 0);
-Rn_sum_urz = sum(r_urz(lags_urz > 0)); % from n = 1 to inf
+Rn_urz = r_urz(lags_urz > 0); % from n = 1 to inf
+n_urz = lags_urz(lags_urz > 0);
+
 R0_prz = r_prz(lags_prz == 0);
-Rn_sum_prz = sum(r_prz(lags_prz > 0)); % from n = 1 to inf
+Rn_prz = r_prz(lags_prz > 0); % from n = 1 to inf
+n_prz = lags_prz(lags_prz > 0);
 
 % Generating the Sx(f) terms.
-Sx_unrz = (1/Tb)*(R0_unrz + 2*Rn_sum_unrz*cos(2*pi*f_unrz*Tb));
-Sx_pnrz = (1/Tb)*(R0_pnrz + 2*Rn_sum_pnrz*cos(2*pi*f_pnrz*Tb));
-Sx_urz = (1/Tb)*(R0_urz + 2*Rn_sum_urz*cos(2*pi*f_urz*Tb));
-Sx_prz = (1/Tb)*(R0_prz + 2*Rn_sum_prz*cos(2*pi*f_prz*Tb));
+Sx_unrz = zeros(1, numel(f_unrz));
+count = 1;
+for f=f_unrz
+    Sx_unrz(count) = (1/Tb)*(R0_unrz + 2*sum(Rn_unrz.*cos(2*pi*f*Tb*n_unrz)));
+    count = count + 1;
+end
 
+Sx_pnrz = zeros(1, numel(f_pnrz));
+count = 1;
+for f=f_pnrz
+    Sx_pnrz(count) = (1/Tb)*(R0_pnrz + 2*sum(Rn_pnrz.*cos(2*pi*f*Tb*n_pnrz)));
+    count = count + 1;
+end
+
+Sx_urz = zeros(1, numel(f_urz));
+count = 1;
+for f=f_urz
+    Sx_urz(count) = (1/Tb)*(R0_urz + 2*sum(Rn_urz.*cos(2*pi*f*Tb*n_urz)));
+    count = count + 1;
+end
+
+Sx_prz = zeros(1, numel(f_prz));
+count = 1;
+for f=f_prz
+    Sx_prz(count) = (1/Tb)*(R0_prz + 2*sum(Rn_prz.*cos(2*pi*f*Tb*n_prz)));
+    count = count + 1;
+end
 %% Getting the final PSD from the formulae and plotting the results.
 Sy_unrz = (abs(P_unrz).^2).*Sx_unrz;
 Sy_pnrz = (abs(P_pnrz).^2).*Sx_pnrz;
